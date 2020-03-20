@@ -398,10 +398,39 @@ int main (){
 
 ### Penjelasan :
 
+```c
+#include <stdlib.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <wait.h>
+```
+Library untuk menjalankan program, ```#include <stdlib.h>``` Merupakan file header yang berfungsi untuk operasi pembanding dan operasi konversi. ```#include <sys/types.h>``` & ```#include <wait.h>``` Agar proses induk bisa menunggu proses anaknya selesai, maka butuh system call wait(). Wait() akan memblok eksekusi program sampai salah satu proses anaknya mati. <br>
 
+```cid=fork();``` digunakan untuk membuat proses baru <br>
 
+```
+if (cid < 0){
+        exit(EXIT_FAILURE); }
+```
+Digunakan jika proses akan berhenti
+
+```
+if(cid == 0){
+        char *var[] = {"mkdir","-p","/home/dimas/modul2/indomie",(char *)NULL};
+```
+Child process untuk membuat direktori baru
+
+```
+execv("/bin/mkdir",var);}
+```
+Agar proses sebelumnya dapat berjalan, ```execv``` fungsi dari sistem operasi yang menjalankan file yang dapat dieksekusi dalam konteks proses yang sudah ada, menggantikan executable sebelumnya
+
+```
+else{
+        while(wait(&stat)>0);
+```
+Parent process sehingga child process dapat dijalankan terlebih dahulu
 
 # Kendala :
-
 - Soal terlalu panjang, rumit sehingga sulit dipahami.
 - Susah banget pokoknya.
