@@ -141,18 +141,13 @@ Adalah beberapa jenis library yang digunakan untuk menjalankan program yang suda
 
 ```c
 int main( int argc, char *argv[] ) {
+  pid_t pid, sid;        // Variabel untuk menyimpan PID
+  int detik, menit, jam;
 
-    pid_t pid, sid; // Variabel untuk menyimpan PID
-    
-    int detik, menit, jam;
-    
-    detik = 0;
-    menit = 0;
-    jam = 0;
-    
-    pid = fork();
+  pid = fork();     // Menyimpan PID dari Child Process
 ```
-Digunakan menyimpan PID dari child process, fungsi ```argc``` atau _Argument for count_ merupakan parameter bertipe int dan berfungsi untuk menunjukkan banyaknya parameter yang digunakan dalam eksekusi program. Fungsi ```argv``` atau _Argument for vector_ merupakan pointer ke string yang akan menyimpan parameter-parameter apa saja yang digunakan dalam eksekusi program. ```pid_t pid, sid;``` adalah variabel untuk menyimpan PID <br>
+
+Fungsi ````argc```` atau _Argument for count_ pada ````int argc, char *argv[]```` merupakan parameter bertipe int dan berfungsi untuk menunjukkan banyaknya parameter yang digunakan dalam eksekusi program; Fungsi ```argv``` atau _Argument for vector_ merupakan pointer ke string yang akan menyimpan parameter-parameter apa saja yang digunakan dalam eksekusi program. Fungsi ```pid_t pid, sid``` Digunakan untuk menyimpan PID dan SID dari child process.
 
  ```c
 /* Keluar saat fork gagal
@@ -169,7 +164,7 @@ Digunakan menyimpan PID dari child process, fungsi ```argc``` atau _Argument for
         exit(EXIT_SUCCESS);
     }
 ```
-Digunakan untuk fork saat gagal & fork saat berhasil <br>
+Digunakan untuk fork saat gagal & fork saat berhasil.
 
  ```c
 umask (0);
