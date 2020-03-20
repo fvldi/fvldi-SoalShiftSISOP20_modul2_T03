@@ -139,7 +139,7 @@ if ((chdir("/root/sistem_operasi/")) < 0) {
 ```
 Adalah beberapa jenis library yang digunakan untuk menjalankan program yang sudah kita buat sebelumnya
 
-```bash
+```c
 int main( int argc, char *argv[] ) {
 
     pid_t pid, sid; // Variabel untuk menyimpan PID
@@ -154,7 +154,7 @@ int main( int argc, char *argv[] ) {
 ```
 Digunakan menyimpan PID dari child process, fungsi ```argc``` atau _Argument for count_ merupakan parameter bertipe int dan berfungsi untuk menunjukkan banyaknya parameter yang digunakan dalam eksekusi program. Fungsi ```argv``` atau _Argument for vector_ merupakan pointer ke string yang akan menyimpan parameter-parameter apa saja yang digunakan dalam eksekusi program. ```pid_t pid, sid;``` adalah variabel untuk menyimpan PID <br>
 
- ```bash
+ ```c
 /* Keluar saat fork gagal
      * (nilai variabel PID < 0) */
 
@@ -171,7 +171,7 @@ Digunakan menyimpan PID dari child process, fungsi ```argc``` atau _Argument for
 ```
 Digunakan untuk fork saat gagal & fork saat berhasil <br>
 
- ```bash
+ ```c
 umask (0);
 
     sid = setsid();
@@ -189,7 +189,7 @@ umask (0);
 ```
 Dengan menggunakan template yang sudah disediakan sebelumnya didalam modul 2 <br>
 
- ```bash
+ ```c
 //Pesan error jika argumen yang diberikan tidak sesuai
     if(argc != 5) {
         printf("Maaf, program hanya menerima 4 argumen yang terdiri atas: detik, menit, jam, dan path file bash script");
@@ -197,7 +197,7 @@ Dengan menggunakan template yang sudah disediakan sebelumnya didalam modul 2 <br
 ```
 Jika argumen yang diberikan tidak sesuai, maka akan muncul pesan error <br>
 
- ```bash
+ ```c
 //Argumen 1: detik
     if(argv[1][0] == '*') {
         detik = 0;
@@ -233,7 +233,7 @@ Jika argumen yang diberikan tidak sesuai, maka akan muncul pesan error <br>
 ```
 Melakukan pengecheckan pada argumen, yang meliputi argumen detik, menit, jam <br>
 
-```bash
+```c
 while (1) {
         // Program intinya
         time_t t;
