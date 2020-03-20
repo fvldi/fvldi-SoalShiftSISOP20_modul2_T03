@@ -254,10 +254,178 @@ Daemon akan melakukan loop tiap detik untuk mengcheck apakah sudah sesuai dengan
 
 ### Soal 2
 
-# Belum
+Shisoppu mantappu! itulah yang selalu dikatakan Kiwa setiap hari karena sekarang dia merasa sudah jago materi sisop. Karena merasa jago, suatu hari Kiwa iseng membuat sebuah program. <br />
+- Pertama-tama, Kiwa membuat sebuah folder khusus, di dalamnya dia membuat sebuah program C yang per 30 detik membuat sebuah folder dengan nama timestamp [YYYY-mm-dd_HH:ii:ss]. <br />
+- Tiap-tiap folder lalu diisi dengan 20 gambar yang di download dari https://picsum.photos/, dimana tiap gambar di download setiap 5 detik. Tiap gambar berbentuk persegi dengan ukuran (t%1000)+100 piksel dimana t adalah detik Epoch Unix. Gambar tersebut diberi nama dengan format timestamp [YYYY-mm-dd_HH:ii:ss]. <br />
+- Agar rapi, setelah sebuah folder telah terisi oleh 20 gambar, folder akan di zip dan folder akan di delete(sehingga hanya menyisakan .zip). <br />
+- Karena takut program tersebut lepas kendali, Kiwa ingin program tersebut men-generate sebuah program "killer" yang siap di run(executable) untuk menterminasi semua operasi program tersebut. Setelah di run, program yang menterminasi ini lalu akan mendelete dirinya sendiri. <br />
+- Kiwa menambahkan bahwa program utama bisa dirun dalam dua mode, yaitu MODE_A dan MODE_B. untuk mengaktifkan MODE_A, program harus dijalankan dengan argumen -a. Untuk MODE_B, program harus dijalankan dengan argumen -b. Ketika dijalankan dalam MODE_A, program utama akan langsung menghentikan semua operasinya ketika program killer dijalankan. Untuk MODE_B, ketika program killer dijalankan, program utama akan berhenti tapi membiarkan proses di setiap folder yang masih berjalan sampai selesai(semua folder terisi gambar, terzip lalu di delete).<br />
+
+Kiwa lalu terbangun dan sedih karena menyadari programnya hanya sebuah mimpi. <br />
+Buatlah program dalam mimpi Kiwa jadi nyata! <br />
+
+Catatan: <br />
+- Tidak boleh memakai system().
+- Program utama harus ter-detach dari terminal <br />
+
+Hint: <br />
+- Gunakan fitur picsum.photos untuk mendapatkan gambar dengan ukuran
+tertentu
+- Epoch Unix bisa didapatkan dari time()
+
+### Penyelesaian :
+
+### Penjelasan :
 
 ### Soal 3
 
-# Belum
+Jaya adalah seorang programmer handal mahasiswa informatika. Suatu hari dia memperoleh tugas yang banyak dan berbeda tetapi harus dikerjakan secara bersamaan (multiprocessing). <br />
+- Program buatan jaya harus bisa membuat dua direktori di “/home/[USER]/modul2/”. Direktori yang pertama diberi nama “indomie”, lalu
+lima detik kemudian membuat direktori yang kedua bernama “sedaap”.
+- Kemudian program tersebut harus meng-ekstrak file jpg.zip di direktori “/home/[USER]/modul2/”. Setelah tugas sebelumnya selesai, ternyata tidak hanya itu tugasnya.
+- Diberilah tugas baru yaitu setelah di ekstrak, hasil dari ekstrakan tersebut (di dalam direktori “home/[USER]/modul2/jpg/”) harus dipindahkan sesuai dengan pengelompokan, semua file harus dipindahkan ke “/home/[USER]/modul2/sedaap/” dan semua direktori harus dipindahkan ke “/home/[USER]/modul2/indomie/”.
+- Untuk setiap direktori yang dipindahkan ke “/home/[USER]/modul2/indomie/” harus membuat dua file kosong. File yang pertama diberi nama “coba1.txt”, lalu 3 detik kemudian membuat file bernama “coba2.txt”. (contoh : “/home/[USER]/modul2/indomie/{nama_folder}/coba1.txt”). <br />
 
+Karena Jaya terlalu banyak tugas dia jadi stress, jadi bantulah Jaya agar bisa membuat
+program tersebut. <br />
 
+Catatan : <br />
+- Tidak boleh memakai system().
+- Tidak boleh memakai function C mkdir() ataupun rename().
+- Gunakan exec dan fork
+- Direktori “.” dan “..” tidak termasuk
+
+### Penyelesaian :
+```bash
+#include <stdlib.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <wait.h>
+
+int main (){
+    pid_t cid;
+    int stat;
+    cid=fork();
+
+    if (cid < 0){
+        exit(EXIT_FAILURE); }
+
+    if(cid == 0){
+        char *var[] = {"mkdir","-p","/home/dimas/modul2/indomie",(char *)NULL};
+
+        execv("/bin/mkdir",var);}
+
+    else{
+        while(wait(&stat)>0);
+
+    cid=fork();
+
+    if (cid < 0){
+        exit(EXIT_FAILURE); }
+
+    if(cid==0){
+        sleep(5);
+        char *var[] = {"mkdir","-p","/home/dimas/modul2/sedaap",(char *)NULL};
+        execv("/bin/mkdir",var);}
+
+    else{
+        while(wait(&stat)>0);
+
+    cid=fork();
+
+    if (cid < 0){
+        exit(EXIT_FAILURE); }
+
+    if(cid==0){
+        char *var[] = {"unzip","/home/dimas/modul2/jpg.zip","-d","/home/dimas/modul2",(char *)NULL};
+
+        execv("/usr/bin/unzip",var);}
+
+    else{
+        while(wait(&stat)>0);
+    cid=fork();
+    if (cid < 0){
+        exit(EXIT_FAILURE); }
+
+    if(cid==0){
+        char *var[] = {"find","/home/dimas/modul2/jpg/","-type","f","-exec","/bin/mv","-t","/home/dimas/modul2/sedaap","{}",";",(char *)NULL};
+
+        execv("/usr/bin/find",var);}
+
+    else{
+        while(wait(&stat)>0);
+
+    cid=fork();
+
+    if (cid < 0){
+        exit(EXIT_FAILURE); }
+
+    if(cid == 0){
+        char *var[] = {"find","/home/dimas/modul2/jpg/","-mindepth","1","-type","d","-exec","/bin/mv","-t","/home/dimas/modul2/indomie","{}",";",(char *)NULL};
+        execv("/usr/bin/find",var);}
+
+    else{
+        while(wait(&stat)>0);
+
+    cid=fork();
+
+    if (cid < 0){
+        exit(EXIT_FAILURE); }
+
+    if(cid==0){
+        char *var[] = {"find","/home/dimas/modul2/indomie/","-mindepth","1","-type","d","-exec","touch","{}/coba1.txt","'\'",";",(char *)NULL};
+
+        execv("/usr/bin/find",var);}
+
+    else{
+        while(wait(&stat)>0);
+        sleep(3);
+
+        char *var[] = {"find","/home/dimas/modul2/indomie/","-mindepth","1","-type","d","-exec","touch","{}/coba2.txt","'\'",";",(char *)NULL};
+        execv("/usr/bin/find",var);}
+        }
+        }
+      }
+    }
+  }
+}
+```
+
+### Penjelasan :
+
+```c
+#include <stdlib.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <wait.h>
+```
+Library untuk menjalankan program, ```#include <stdlib.h>``` Merupakan file header yang berfungsi untuk operasi pembanding dan operasi konversi. ```#include <sys/types.h>``` & ```#include <wait.h>``` Agar proses induk bisa menunggu proses anaknya selesai, maka butuh system call wait(). Wait() akan memblok eksekusi program sampai salah satu proses anaknya mati. <br>
+
+```cid=fork();``` digunakan untuk membuat proses baru <br>
+
+```
+if (cid < 0){
+        exit(EXIT_FAILURE); }
+```
+Digunakan jika proses akan berhenti
+
+```
+if(cid == 0){
+        char *var[] = {"mkdir","-p","/home/dimas/modul2/indomie",(char *)NULL};
+```
+Child process untuk membuat direktori baru
+
+```
+execv("/bin/mkdir",var);}
+```
+Agar proses sebelumnya dapat berjalan, ```execv``` fungsi dari sistem operasi yang menjalankan file yang dapat dieksekusi dalam konteks proses yang sudah ada, menggantikan executable sebelumnya
+
+```
+else{
+        while(wait(&stat)>0);
+```
+Parent process sehingga child process dapat dijalankan terlebih dahulu
+
+# Kendala :
+- Soal terlalu panjang, rumit sehingga sulit dipahami.
+- Susah banget pokoknya.
