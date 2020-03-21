@@ -231,8 +231,9 @@ Melakukan pengecheckan pada argumen, yang meliputi argumen detik, menit, dan jam
 
 ```c
 while (1) {
-        // Program intinya
-        time_t t;
+    // Tulis program kalian di sini
+
+    time_t t;
         struct tm* ptm;
 
         t = time(NULL);
@@ -244,9 +245,8 @@ while (1) {
                 execv("/bin/bash", argx);
             }
         }
-
-        sleep(1);
-    }
+    sleep(1);
+  }
 }
 ```
 Daemon akan melakukan loop tiap detik untuk mengcheck apakah sudah sesuai dengan yang diinputkan <br> 
