@@ -428,5 +428,4 @@ else{
 Parent process sehingga child process dapat dijalankan terlebih dahulu
 
 # Kendala :
-- Soal terlalu panjang, rumit sehingga sulit dipahami.
-- Susah banget pokoknya.
+- pada soal satu sempat memiliki kendala pada saat run program, dimana jika di run dengan ./program \* detik menit /path/file.sh maka program daemon akan terdeteksi melalui ````ps -aux | grep file.sh````, namun ````file.sh```` yang berisi perintah ````mkdir new_folder```` itu sendiri tidak berjalan, Namun problem tersebut sudah dapat kami selesaikan dengan mengubah isi ````file.sh```` dengan perintah ````time >> file.txt````.
