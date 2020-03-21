@@ -27,7 +27,7 @@ Contoh ```./program \* 34 7 /home/somi/test.sh ``` <br>
 Program dengan argumen seperti contoh di atas akan menjalankan script test.sh setiap
 detik pada jam 07:34.
  #### Penyelesaian :
- ```bash
+ ```c
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
@@ -143,90 +143,91 @@ Adalah beberapa jenis library yang digunakan untuk menjalankan program yang suda
 int main( int argc, char *argv[] ) {
   pid_t pid, sid;        // Variabel untuk menyimpan PID
   int detik, menit, jam;
-
-  pid = fork();     // Menyimpan PID dari Child Process
 ```
 
-Fungsi ````argc```` atau _Argument for count_ pada ````int argc, char *argv[]```` merupakan parameter bertipe int dan berfungsi untuk menunjukkan banyaknya parameter yang digunakan dalam eksekusi program; Fungsi ```argv``` atau _Argument for vector_ merupakan pointer ke string yang akan menyimpan parameter-parameter apa saja yang digunakan dalam eksekusi program. Fungsi ```pid_t pid, sid``` Digunakan untuk menyimpan PID dan SID dari child process.
+Fungsi ````argc```` atau _Argument for count_ pada ````int argc, char *argv[]```` merupakan parameter bertipe int dan berfungsi untuk menunjukkan banyaknya parameter yang digunakan dalam eksekusi program; Fungsi ```argv``` atau _Argument for vector_ merupakan pointer ke string yang akan menyimpan parameter-parameter apa saja yang digunakan dalam eksekusi program. Fungsi ```pid_t pid, sid``` Digunakan untuk menyimpan PID dan SID dari child process. Fungsi ````int detik, menit, jam```` untuk mendeklarasikan variabel dengan tipe data integer diantaranya detik, menit, dan jam.
 
  ```c
-/* Keluar saat fork gagal
-     * (nilai variabel PID < 0) */
+pid = fork();     // Menyimpan PID dari Child Process
 
-    if (pid <0) {
-        exit(EXIT_FAILURE);
-    }
+  /* Keluar saat fork gagal
+  * (nilai variabel pid < 0) */
+  if (pid < 0) {
+    exit(EXIT_FAILURE);
+  }
 
-    /* Keluar saat fork berhasil
-     * (nilai variabel PID adalah PID dari child process) */
-
-    if (pid > 0) {
-        exit(EXIT_SUCCESS);
-    }
+  /* Keluar saat fork berhasil
+  * (nilai variabel pid adalah PID dari child process) */
+  if (pid > 0) {
+    exit(EXIT_SUCCESS);
+  }
 ```
-Digunakan untuk fork saat gagal & fork saat berhasil.
 
- ```c
+Fungsi daiatas digunakan untuk membuat sebuah parent process dan memunculkan child process dengan melakukan ````fork()````. Kemudian mematikan parent process agar sistem operasi mengira bahwa proses telah selesai.
+
+```c
 umask (0);
-
-    sid = setsid();
-    if (sid < 0) {
-        exit(EXIT_FAILURE);
-    }
-
-    if ((chdir("/media/sf_shared/sisop-modul-2/")) < 0) {
-        exit(EXIT_FAILURE);
-    }
-
-    close(STDIN_FILENO);
-    close(STDOUT_FILENO);
-    close(STDERR_FILENO);
 ```
-Dengan menggunakan template yang sudah disediakan sebelumnya didalam modul 2 <br>
+
+Setiap file dan directory memiliki permission atau izin yang mengatur siapa saja yang boleh melakukan read, write, dan execute pada file atau directory tersebut.
+
+Dengan menggunakan umask kami mengatur permission dari suatu file pada saat file itu dibuat. Di sini kami mengatur nilai ````umask(0)```` agar kami mendapatkan akses full terhadap file yang dibuat oleh daemon.
+
+````c
+sid = setsid();
+  if (sid < 0) {
+    exit(EXIT_FAILURE);
+  }
+````
+
+Sebuah Child Process harus memiliki SID agar dapat berjalan. Tanpa adanya SID, Child Process yang Parent-nya sudah di-kill akan menjadi Orphan Process.
+
+Untuk mendapatkan SID kami menggunakan perintah ````setsid()````. Perintah tersebut memiliki return type yang sama dengan perintah ````fork()````.
+
+````c
+if ((chdir("/root/sistem_operasi/")) < 0) {
+    exit(EXIT_FAILURE);
+  }
+````
+
+Pada fungsi diatas, kami mengubah working directory menjadi ````/root/sistem_operasi/````. Untuk mengubah Working Directory itu sendiri, kami menggunakan perintah ````chdir()````.
 
  ```c
 //Pesan error jika argumen yang diberikan tidak sesuai
     if(argc != 5) {
         printf("Maaf, program hanya menerima 4 argumen yang terdiri atas: detik, menit, jam, dan path file bash script");
+        return 0;
     }
 ```
-Jika argumen yang diberikan tidak sesuai, maka akan muncul pesan error <br>
+Jika argumen yang diberikan tidak berjumlah 5, maka akan muncul pesan error yaitu _"Maaf, program hanya menerima 4 argumen yang terdiri atas: detik, menit, jam, dan path file bash script"_<br>
 
  ```c
-//Argumen 1: detik
-    if(argv[1][0] == '*') {
-        detik = 0;
-    } else if(isalpha(argv[1][0])) {
-        printf("Argument 1 harus berisi amgka");
-    } else if(atoi(argv[1]) < 0 || atoi(argv[1]) > 59) {
-        printf("Argument 1 harus berisi detik 0-59 atau * (any value)");
-    } else {
-        detik = atoi(argv[1]);
-    }
-
-    //Argumen 2: menit
-    if(argv[2][0] == '*') {
-        menit = 0;
-    } else if(isalpha(argv[2])) {
-        printf("Argument 2 harus berisi angka");
-    } else if(atoi(argv[2]) < 0 || atoi(argv[2]) > 59) {
-        printf("Argument 2 harus berisi menit 0-59 atau * (any value)");
-    } else {
-        menit = atoi(argv[2]);
-    }
-
-    //Argumen 3: jam
-    if(argv[3][0] == '*') {
-        jam = 0;
-    } else if(isalpha(argv[3])) {
-        printf("Argument 3 harus berisi angka");
-    } else if(atoi(argv[3]) < 0 || atoi(argv[3]) > 23) {
-        printf("Argument 3 harus berisi jam 0-23 atau * (any value)");
-    } else {
-        jam = atoi(argv[3]);
-    }
+//Argument Detik
+  if(argv[1][0] == '*'){
+    detik = 0;
+  }else if(isalpha(argv[1][0])){
+    printf("Argument 1 harus berisi amgka");
+  }else{
+    detik = atoi(argv[1]);
+  }
+  //Argument Menit
+  if(argv[2][0] == '*'){
+    menit = 0;
+  }else if(isalpha(argv[2][0])){
+    printf("Argument 2 harus berisi angka");
+  }else{
+    menit = atoi(argv[2]);
+  }
+  //Argument Jam
+  if(argv[3][0] == '*'){
+    jam = 0;
+  }else if(isalpha(argv[3][0])){
+    printf("Argument 3 harus berisi angka");
+  }else{
+    jam = atoi(argv[3]);
+  }
 ```
-Melakukan pengecheckan pada argumen, yang meliputi argumen detik, menit, jam <br>
+Melakukan pengecheckan pada argumen, yang meliputi argumen detik, menit, dan jam. <br>
 
 ```c
 while (1) {
