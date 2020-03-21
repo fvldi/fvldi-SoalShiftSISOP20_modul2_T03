@@ -249,7 +249,7 @@ while (1) {
   }
 }
 ```
-Daemon akan melakukan loop tiap detik untuk mengcheck apakah sudah sesuai dengan yang diinputkan <br> 
+Daemon akan melakukan loop tiap detik untuk mengcheck apakah sudah sesuai dengan yang diinputkan. Fungsi ````bash,argv[4]```` akan menjalankan file bash yang diinputkan pada argumen ke 4. <br> 
 
 
 
