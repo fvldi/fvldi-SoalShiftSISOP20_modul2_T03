@@ -297,7 +297,7 @@ Catatan : <br />
 - Direktori “.” dan “..” tidak termasuk
 
 ### Penyelesaian :
-```bash
+```c
 #include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -404,24 +404,24 @@ Library untuk menjalankan program, ```#include <stdlib.h>``` Merupakan file head
 
 ```cid=fork();``` digunakan untuk membuat proses baru <br>
 
-```
+```c
 if (cid < 0){
         exit(EXIT_FAILURE); }
 ```
 Digunakan jika proses akan berhenti
 
-```
+```c
 if(cid == 0){
         char *var[] = {"mkdir","-p","/home/dimas/modul2/indomie",(char *)NULL};
 ```
 Child process untuk membuat direktori baru
 
-```
+```c
 execv("/bin/mkdir",var);}
 ```
 Agar proses sebelumnya dapat berjalan, ```execv``` fungsi dari sistem operasi yang menjalankan file yang dapat dieksekusi dalam konteks proses yang sudah ada, menggantikan executable sebelumnya
 
-```
+```c
 else{
         while(wait(&stat)>0);
 ```
