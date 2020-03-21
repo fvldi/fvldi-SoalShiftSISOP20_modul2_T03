@@ -124,7 +124,7 @@ if ((chdir("/root/sistem_operasi/")) < 0) {
 }
 ```
 ### Penjelasan
-```bash
+```c
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
